@@ -4,50 +4,46 @@ from TinkofApiWrapper import AccountType
 from TinkoffTransaction import TinkoffTransaction
 from TransactionsProcessor import TransactionsProcessor
 
+# read token from config
 token = ''
 with open('settings.json') as f:
     data = json.load(f)
     token = data['tinkoff_open_api_key']
 
+# initialize api
 tinkoff_api = TinkoffApiWrapper(token)
 
 
-broker_transactions = tinkoff_api.get_transactions(AccountType.broker)
-iis_transactions = tinkoff_api.get_transactions(AccountType.iis)
+# print useful reports
+def print_transaction_report(account_type: AccountType):
+    account_name = ''
+    if account_type == AccountType.broker:
+        account_name = 'broker'
+    elif account_type == AccountType.iis:
+        account_name = 'iis'
+    else:
+        print('Invalid account type')
+        return
+
+    transactions = tinkoff_api.get_transactions(account_type)
+    transactions = [TinkoffTransaction(tr) for tr in transactions]
+
+    transactions_processor = TransactionsProcessor(transactions)
+    overall_tax_payed_usd = transactions_processor.get_overall_tax_payed_usd()
+    overall_tax_payed_rub = transactions_processor.get_overall_tax_payed_rub()
+    dividend_received_usd = transactions_processor.get_overall_dividend_received_usd()
+    dividend_received_rub = transactions_processor.get_overall_dividend_received_rub()
+
+    print(f'Overall tax payed on {account_name} account:')
+    print(f'{overall_tax_payed_usd:.1f} $')
+    print(f'{overall_tax_payed_rub:.1f} ₽')
+    print('-'*100)
+
+    print(f'Overall dividend received on {account_name} account:')
+    print(f'{dividend_received_usd:.1f} $')
+    print(f'{dividend_received_rub:.1f} ₽')
+    print('-'*100)
 
 
-def initialize_transaction(transactions):
-    tinkoff_transactions = [TinkoffTransaction(tr) for tr in transactions]
-    return tinkoff_transactions
-
-
-broker_tinkoff_transactions = initialize_transaction(broker_transactions)
-iis_tinkoff_transactions = initialize_transaction(iis_transactions)
-
-transactions_processor = TransactionsProcessor(broker_tinkoff_transactions)
-overall_tax_payed_usd = transactions_processor.get_overall_tax_payed_usd()
-overall_tax_payed_rub = transactions_processor.get_overall_tax_payed_rub()
-dividend_received_usd = transactions_processor.get_overall_dividend_received_usd()
-dividend_received_rub = transactions_processor.get_overall_dividend_received_rub()
-print('Overall tax payed on broker account:')
-print(round(overall_tax_payed_usd, 2), '$')
-print(round(overall_tax_payed_rub, 2), '₽')
-print('------------------')
-print('Overall dividend received on broker account:')
-print(round(dividend_received_usd, 2), '$')
-print(round(dividend_received_rub, 2), '₽')
-print('------------------')
-
-transactions_processor = TransactionsProcessor(iis_tinkoff_transactions)
-overall_tax_payed_usd = transactions_processor.get_overall_tax_payed_usd()
-overall_tax_payed_rub = transactions_processor.get_overall_tax_payed_rub()
-dividend_received_usd = transactions_processor.get_overall_dividend_received_usd()
-dividend_received_rub = transactions_processor.get_overall_dividend_received_rub()
-print('Overall tax payed on iis account:')
-print(round(overall_tax_payed_usd, 2), '$')
-print(round(overall_tax_payed_rub, 2), '₽')
-print('------------------')
-print('Overall dividend received on iis account:')
-print(round(dividend_received_usd, 2), '$')
-print(round(dividend_received_rub, 2), '₽')
-print('------------------')
+print_transaction_report(AccountType.broker)
+print_transaction_report(AccountType.iis)
