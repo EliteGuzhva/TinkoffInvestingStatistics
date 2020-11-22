@@ -37,12 +37,12 @@ def print_transaction_report(account_type: AccountType):
     print(f'Overall tax payed on {account_name} account:')
     print(f'{overall_tax_payed_usd:.1f} $')
     print(f'{overall_tax_payed_rub:.1f} ₽')
-    print('-'*100)
+    print('-'*50)
 
     print(f'Overall dividend received on {account_name} account:')
     print(f'{dividend_received_usd:.1f} $')
     print(f'{dividend_received_rub:.1f} ₽')
-    print('-'*100)
+    print('-'*50)
 
 
 print_transaction_report(AccountType.broker)
