@@ -1,9 +1,10 @@
-**Tinkoff Investing Statistics**
+Tinkoff Investing Statistics
+============================
 
-*Важно!!!*
-Нужно создать файл settings.json:
-```
+## Конфигурация
+Нужно создать файл *settings.json*:
+```json
 {
-    "tinkoff_open_api_key": ""
+    "tinkoff_open_api_key": "your_key"
 }
 ```

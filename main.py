@@ -17,12 +17,7 @@ iis_transactions = tinkoff_api.get_transactions(AccountType.iis)
 
 
 def initialize_transaction(transactions):
-    tinkoff_transactions = []
-    for tr in transactions:
-        transaction = TinkoffTransaction(tr)
-        tinkoff_transactions.append(transaction)
-        # print(transaction)
-        # print('===========================')
+    tinkoff_transactions = [TinkoffTransaction(tr) for tr in transactions]
     return tinkoff_transactions
 
 
