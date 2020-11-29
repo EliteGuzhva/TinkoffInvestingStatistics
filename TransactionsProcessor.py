@@ -79,6 +79,15 @@ class TransactionsProcessor(object):
             return is_comission_type and is_currency and done
         return self.__get_sum_with_predicate(predicate)
 
+    # Overall service commission payed
+    def get_service_commission_payed(self):
+        def predicate(tr):
+            operation_type = tr.operation_type
+            done = tr.status == self.__DONE_STATUS
+            is_comission_type = operation_type == self.__SERVICE_COMMISSION_OPERATION_TYPE
+            return is_comission_type and done
+        return self.__get_sum_with_predicate(predicate)
+
     # predicate is a function that takes transaction and returns bool
     def __get_sum_with_predicate(self, predicate):
         summ = 0.0

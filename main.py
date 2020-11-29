@@ -39,6 +39,8 @@ def print_transaction_report(account_type: AccountType):
     broker_commission_usd = transactions_processor.get_overall_commision_payed_usd()
     broker_commission_rub = transactions_processor.get_overall_commision_payed_rub()
 
+    service_commission = transactions_processor.get_service_commission_payed()
+
     print(f'Overall tax payed on {account_name} account:')
     print(f'{overall_tax_payed_usd:.1f} $')
     print(f'{overall_tax_payed_rub:.1f} ₽')
@@ -54,6 +56,11 @@ def print_transaction_report(account_type: AccountType):
     print(f'{broker_commission_rub:.1f} ₽')
     print('-' * 50)
 
+    print(f'Overall service commission payed on {account_name} account:')
+    print(f'{service_commission:.1f} ₽')
+    print('-' * 50)
+
 
 print_transaction_report(AccountType.broker)
 print_transaction_report(AccountType.iis)
+
