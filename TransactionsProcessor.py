@@ -5,6 +5,7 @@ class TransactionsProcessor(object):
 
     __PAY_IN_OPERATION_TYPE = 'PayIn'  # Пополнение брокерского счета
     __PAY_OUT_OPERATION_TYPE = 'PayOut'  # Вывод денег
+    __BUY_OPERATION_TYPE = 'Buy'  # Покупка
     __BUY_CARD_OPERATION_TYPE = 'BuyCard'  # Покупка с карты
     __SELL_OPERATION_TYPE = 'Sell'  # Продажа
     __BROKER_COMMISSION_OPERATION_TYPE = 'BrokerCommission'  # Комиссия брокера
@@ -87,6 +88,32 @@ class TransactionsProcessor(object):
             is_comission_type = operation_type == self.__SERVICE_COMMISSION_OPERATION_TYPE
             return is_comission_type and done
         return self.__get_sum_with_predicate(predicate)
+
+    def get_statistics_by_figi(self, figi):
+        transactions = [tr for tr in self.__transactions if tr.figi == figi]
+        total_buy = 0.0
+        total_sell = 0.0
+        total_commission_payed = 0.0
+        total_dividend_received = 0.0
+        total_tax_payed = 0.0
+        for tr in transactions:
+            if tr.status != self.__DONE_STATUS:
+                continue
+            if tr.operation_type == self.__BUY_CARD_OPERATION_TYPE:
+                total_buy += tr.payment
+            elif tr.operation_type == self.__BUY_OPERATION_TYPE:
+                total_buy += tr.payment
+            elif tr.operation_type == self.__SELL_OPERATION_TYPE:
+                total_sell += tr.payment
+            elif tr.operation_type == self.__BROKER_COMMISSION_OPERATION_TYPE:
+                total_commission_payed += tr.payment
+            elif tr.operation_type == self.__DIVIDEND_OPERATION_TYPE:
+                total_dividend_received += tr.payment
+            elif tr.operation_type == self.__TAX_OPERATION_TYPE:
+                total_tax_payed += tr.payment
+            elif tr.operation_type == self.__TAX_DIVIDEND_OPERATION_TYPE:
+                total_tax_payed += tr.payment
+        return abs(total_buy), abs(total_sell), abs(total_commission_payed), abs(total_dividend_received), abs(total_tax_payed)
 
     # predicate is a function that takes transaction and returns bool
     def __get_sum_with_predicate(self, predicate):

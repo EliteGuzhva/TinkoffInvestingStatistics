@@ -31,11 +31,18 @@ class TinkoffApiWrapper(object):
         ops = self.__client.operations.operations_get(_from=date1, to=date2, broker_account_id=account_id)
         return ops.payload.operations
 
-    def get_info_by_figi(self, figi):
+    def get_ticker_info_by_figi(self, figi):
         instrument = self.__client.market.market_search_by_figi_get(figi)
         name = instrument.payload.name
         ticker = instrument.payload.ticker
-        return name, ticker
+        return name, ticker, figi
+
+    def get_ticker_info_by_ticker(self, ticker):
+        instruments = self.__client.market.market_search_by_ticker_get(ticker)
+        instrument = instruments.payload.instruments[0]
+        name = instrument.name
+        figi = instrument.figi
+        return name, ticker, figi
 
     def __set_account_ids(self):
         accounts = self.__client.user.user_accounts_get().payload.accounts
