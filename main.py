@@ -4,6 +4,8 @@ from TinkofApiWrapper import AccountType
 from TinkoffTransaction import TinkoffTransaction
 from TransactionsProcessor import TransactionsProcessor
 
+from tui.main_menu import MainMenu
+
 # read token from config
 token = ''
 with open('settings.json') as f:
@@ -12,6 +14,7 @@ with open('settings.json') as f:
 
 # initialize api
 tinkoff_api = TinkoffApiWrapper(token)
+transactions_processor: TransactionsProcessor = None
 
 
 # print useful reports
@@ -64,14 +67,14 @@ def print_transaction_report(account_type: AccountType):
     надо это говно потом поменять, пока просто для примера оставил с рублями, здесь так то и бачи могут быть
     и тикеры чтоб удобней вводить было, я там написал функцию в TinkofApiWrapper для получения figi по тикеру,
     но она несколько инструментов выдвать может, я это никак не обрабатывал, поэтому пока не пользуюсь ей
-    
+
     еще надо узнать текущую стоимость этой акции в портфеле, чтобы понимать сколько выйдет прибыль или убыток
-    если продать эту акцию прямо сейчас 
+    если продать эту акцию прямо сейчас
     """
-    ticker = 'SNGSP'
-    figi = 'BBG004S681M2'  # Префы Сургутнефтегаза для примера
+    ticker = 'NOK'
+    name, _, figi = tinkoff_api.get_ticker_info_by_ticker(ticker)
     statistics = transactions_processor.get_statistics_by_figi(figi)
-    print(f'Statistics for {ticker} on {account_name} account:')
+    print(f'Statistics for {name} on {account_name} account:')
     print(f'Total purchase amount: {statistics[0]:.1f} ₽')
     print(f'Total sale amount: {statistics[1]:.1f} ₽')
     print(f'Total commission payed: {statistics[2]:.1f} ₽')
@@ -79,5 +82,8 @@ def print_transaction_report(account_type: AccountType):
     print(f'Total tax payed: {statistics[4]:.1f} ₽')
 
 
-print_transaction_report(AccountType.broker)
-print_transaction_report(AccountType.iis)
+# print_transaction_report(AccountType.broker)
+# print_transaction_report(AccountType.iis)
+
+menu = MainMenu(token)
+menu.run()
