@@ -2,7 +2,6 @@ from enum import Enum
 from datetime import datetime
 from pytz import timezone
 from openapi_client import openapi
-import time
 
 
 class AccountType(Enum):

@@ -1,3 +1,4 @@
+from typing import Optional
 from tui.utils import *
 
 class Option:
@@ -11,7 +12,7 @@ class Option:
 
 class OptionWidget:
     def __init__(self):
-        self._title: str = None
+        self._title: Optional[str] = None
         self._quit_message: str = "Quitting..."
 
         # TODO: use typing

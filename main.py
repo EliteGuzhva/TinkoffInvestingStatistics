@@ -1,4 +1,5 @@
 import json
+from typing import Optional
 from TinkofApiWrapper import TinkoffApiWrapper
 from TinkofApiWrapper import AccountType
 from TinkoffTransaction import TinkoffTransaction
@@ -14,7 +15,7 @@ with open('settings.json') as f:
 
 # initialize api
 tinkoff_api = TinkoffApiWrapper(token)
-transactions_processor: TransactionsProcessor = None
+transactions_processor: Optional[TransactionsProcessor] = None
 
 
 # print useful reports

@@ -1,3 +1,4 @@
+from typing import Optional
 from TinkofApiWrapper import TinkoffApiWrapper
 from TinkofApiWrapper import AccountType
 from TinkoffTransaction import TinkoffTransaction
@@ -10,7 +11,7 @@ from tui.option import OptionWidget
 class MainMenu:
     def __init__(self, token: str):
         self.api = TinkoffApiWrapper(token)
-        self.tp: TransactionsProcessor = None
+        self.tp: Optional[TransactionsProcessor] = None
 
 
         self._accounts = OptionWidget()
