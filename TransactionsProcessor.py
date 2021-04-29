@@ -1,3 +1,4 @@
+from typing import List
 from TinkoffTransaction import TinkoffTransaction
 
 
@@ -20,7 +21,7 @@ class TransactionsProcessor(object):
     __DONE_STATUS = 'Done'
     __DECLINE_STATUS = 'Decline'
 
-    def __init__(self, transactions: [TinkoffTransaction]):
+    def __init__(self, transactions: List[TinkoffTransaction]):
         self.__transactions = transactions
 
     # Methods for payed tax
